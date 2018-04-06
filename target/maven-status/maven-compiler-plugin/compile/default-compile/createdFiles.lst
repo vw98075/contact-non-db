@@ -1,0 +1,5 @@
+com/tideworks/contacts/Contact.class
+com/tideworks/contacts/ContactsDataStore.class
+com/tideworks/contacts/Query.class
+com/tideworks/contacts/ContactDataStoreImpl.class
+com/tideworks/contacts/QueryImpl.class
