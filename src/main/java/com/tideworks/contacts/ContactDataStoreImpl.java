@@ -11,7 +11,7 @@ public class ContactDataStoreImpl implements ContactsDataStore {
     private Map<String, Contact> dataStorage = new HashMap<>();
 
     public void delete(final Contact contact) {
-        dataStorage.remove(contact);
+        dataStorage.remove(contact.getEmail());
     }
 
     public Contact insert(final Contact contact){
