@@ -30,6 +30,8 @@ public class ContactDataStoreImpl implements ContactsDataStore {
     public Contact selectOne(final Query criteria){
 
         // TODO: need to check criteria data type and throw an exception if it is not QueryImpl
+        if(!(criteria instanceof QueryImpl))
+            return null;
 
         QueryImpl query = (QueryImpl) criteria;
         Optional<String> queryEmail = query.getEmail();
@@ -39,25 +41,24 @@ public class ContactDataStoreImpl implements ContactsDataStore {
                 return contact;
 
             Optional<String> queryFirstName = query.getFirstName();
-            if(queryFirstName.isPresent() && contact.getFirstName() != queryFirstName.get()) {
+            if(queryFirstName.isPresent() && !contact.getFirstName().equals(queryFirstName.get())) {
                 return null;
             }
 
             Optional<String> queryLastName = query.getLastName();
-            if(queryLastName.isPresent() && contact.getLastName() != queryLastName.get()) {
+            if(queryLastName.isPresent() && !contact.getLastName().equals(queryLastName.get())) {
                 return null;
             }
 
             Optional<String> queryPhone = query.getPhone();
-            if(queryPhone.isPresent() && contact.getPhone() != queryPhone.get()) {
+            if(queryPhone.isPresent() && !contact.getPhone().equals(queryPhone.get())) {
                 return null;
             }
 
             Optional<String> queryAddress = query.getAddress();
-            if(queryAddress.isPresent() && contact.getAddress() != queryAddress.get()) {
+            if(queryAddress.isPresent() && !contact.getAddress().equals(queryAddress.get())) {
                 return null;
             }
-
             return contact;
         } else {
 
@@ -176,9 +177,16 @@ public class ContactDataStoreImpl implements ContactsDataStore {
                 return c.isPresent() ? c.get() : null;
             }
 
-        }
-        return null;
+            if(queryFirstName.isPresent() && !queryLastName.isPresent() && !queryPhone.isPresent() && !queryAddress.isPresent()) {
+                Optional<Contact> c = contacts.stream().filter(
+                        m -> queryFirstName.get().equals(m.getFirstName())
+                ).findFirst();
+                return c.isPresent() ? c.get() : null;
+            }
 
+            // none of them is presented
+            return null;
+        }
     }
 
     /**
@@ -189,6 +197,6 @@ public class ContactDataStoreImpl implements ContactsDataStore {
     public Contact update(final Contact contact){
         if(!dataStorage.containsKey(contact.getEmail()))
             return null;
-        return dataStorage.put(contact.getEmail(), contact);
+        return dataStorage.replace(contact.getEmail(), contact);
     }
 }

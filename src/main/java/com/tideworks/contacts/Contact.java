@@ -1,5 +1,7 @@
 package com.tideworks.contacts;
 
+import java.util.Objects;
+
 /**
  * Domain model that defines a Contact for use in a mobile phone
  *
@@ -52,4 +54,21 @@ public class Contact {
         this.address = address;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Contact)) return false;
+        Contact contact = (Contact) o;
+        return Objects.equals(firstName, contact.firstName) &&
+                Objects.equals(lastName, contact.lastName) &&
+                Objects.equals(phone, contact.phone) &&
+                Objects.equals(email, contact.email) &&
+                Objects.equals(address, contact.address);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(firstName, lastName, phone, email, address);
+    }
 }
